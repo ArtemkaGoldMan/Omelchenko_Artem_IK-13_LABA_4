@@ -4,6 +4,7 @@
     {
         public string NameOfdevice { get; set; }
         public int PriceForDevice { get; set; }
+        public string Category { get; set; }
         public abstract void GetPrice();
         public abstract void GetInfo();
         public abstract void Restart();
@@ -14,31 +15,48 @@
     class Pc : Gadget
     {
         public override void Connection()
-        {  
+        {
+
         }
         public override void GetPrice()=> Console.WriteLine($"Цiна: {PriceForDevice}");
         public override void Restart() => Console.WriteLine("Перезагрузка...");
         public override void GetInfo() => Console.WriteLine($"Iм'я: {NameOfdevice}");
     }
-    class Computer : Pc
+    class Computer : Gadget
     {
-        public Computer(string NAME, int Price)
+        public Computer(string NAME, int Price, string category)
         {
             NameOfdevice = NAME;
             PriceForDevice = Price;
+            Category = category;
         }
         public override void GetPrice() => Console.WriteLine($"Цiна системного блоку: {PriceForDevice}");
         public override void Restart() => Console.WriteLine("Перезагрузка...");
         public override void GetInfo() => Console.WriteLine($"Iм'я системного блоку: {NameOfdevice}");
+
+        public override void Connection()
+        {
+            Console.WriteLine("Turn on (1) or turn off(2) this device");
+            if (Int32.Parse(Console.ReadLine()) == 1)
+            {
+                Console.WriteLine("This device is turned on");
+
+            }
+            else
+            {
+                Console.WriteLine("This device is turned off");
+            }
+        }
         
     }
-    class Screen: Pc
+    class Screen: Gadget
     {
         public string Marka { get; set; }
-        public Screen(string NAME, int Price)
+        public Screen(string NAME, int Price, string category)
         {
             NameOfdevice = NAME;
             PriceForDevice = Price;
+            Category = category;
         }
         public Screen(string MARKA)
         {
@@ -67,10 +85,11 @@
     class Phone : Gadget
     {
         public string Marka { get; set; }
-        public Phone(string NAME, int Price)
+        public Phone(string NAME, int Price, string category)
         {
             NameOfdevice = NAME;
             PriceForDevice = Price;
+            Category = category;
         }
         public Phone(string MARKA)
         {
@@ -94,154 +113,90 @@
             }
         }
     }
-    class shop: Gadget
+    class Shop
     {
-        public static void Sort(List<Gadget> gadgets)
+        List<Gadget> gadgets = new List<Gadget>();
+        public void AddToListShop(Gadget gadget)
         {
-
-            int price1=0;
-            int price2=0;
-            int price3=0;
-            int sum = 0;
-
-            foreach (Gadget gadget in gadgets)
+            gadgets.Add(gadget);
+        }
+        public void sort()
+        {
+            int pricePC = 0, priceScreen = 0, pricePhone = 0;
+            Console.WriteLine("Choose a  item (1)-PC,(2)-Screen,(3)- Phone to know their full costs");
+            string key = Console.ReadLine();
+            if(key == "1")
             {
-                sum += gadget.PriceForDevice;
-
-            }
-            Console.WriteLine("All sum of price: "+sum);
-
-            Console.WriteLine("Choose a kind of gadjets to sum up their costs: PC(1)   Screen(2)    Phone(3)");
-            string key =Console.ReadLine();
-            if(key =="1")
-            {
-                foreach (Computer comp in gadgets)
+                foreach(Gadget gadget in gadgets)
                 {
-                    price1 = comp.PriceForDevice++;
+                    if (gadget.Category.Equals("PC"))
+                    {
+                        pricePC += gadget.PriceForDevice;
+                    }
+                   
                 }
-                Console.WriteLine("Price for all PC = " + price1);
+                Console.WriteLine("Full price for all PC: " + pricePC);
             }
-            else if(key == "2")
+            else if (key == "2")
             {
-                foreach (Screen scr in gadgets)
+                foreach (Gadget gadget in gadgets)
                 {
-                    price2 = scr.PriceForDevice++;
-                }
-                Console.WriteLine("Price for all Screen = " + price2);
+                    if (gadget.Category.Equals("Screen"))
+                    {
+                        pricePC += gadget.PriceForDevice;
+                    }
 
+                }
+                Console.WriteLine("Full price for all Screen: " + priceScreen);
             }
             else if (key == "3")
             {
-                foreach (Phone phone in gadgets)
+                foreach (Gadget gadget in gadgets)
                 {
-                    price3 = phone.PriceForDevice++;
-                }
-                Console.WriteLine("Price for all Screen = " + price3);
+                    if (gadget.Category.Equals("Phone"))
+                    {
+                        pricePC += gadget.PriceForDevice;
+                    }
 
+                }
+                Console.WriteLine("Full price for all Phone: " + pricePhone);
             }
 
         }
-        public static void Shop(Gadget gadget, List<Gadget> gadgets)
-        {
-           
-            gadgets.Add(gadget);
-            
-        }
 
-
-
-        public override void Connection()
-        {
-        }
-        public override void GetPrice() => Console.WriteLine($"Цiна: {PriceForDevice}");
-        public override void Restart() => Console.WriteLine("Перезагрузка...");
-        public override void GetInfo() => Console.WriteLine($"Iм'я: {NameOfdevice}");
     }
     class Program
     {
         public static void Main()
         {
-            List<Gadget> gadgets = new List<Gadget>();
+            
+            Computer computer = new Computer("Iгровий пк", 32000, "PC");
+            Screen screen = new Screen("Iгровий монiтор", 5000, "Screen");
+            Phone phone = new Phone("Samsung", 15000, "Phone");
 
-            Computer computer = new Computer("Iгровий пк", 32000);
-            Screen screen = new Screen("Iгровий монiтор", 5000);
-            Phone phone = new Phone("Samsung", 15000);
+            Computer computer2 = new Computer(" пк", 60000, "PC");
+            Screen screen2 = new Screen(" монiтор", 7000, "Screen");
+            Phone phone2 = new Phone("Acer", 20000, "Phone");
 
-            Computer computer2 = new Computer(" пк", 60000);
-            Screen screen2 = new Screen(" монiтор", 7000);
-            Phone phone2 = new Phone("Acer", 20000);
-
-            Computer computer3 = new Computer("pc", 150000);
-            Screen screen3 = new Screen("Screen", 10000);
-            Phone phone3 = new Phone("Iphone", 10000);
+            Computer computer3 = new Computer("pc", 150000, "PC");
+            Screen screen3 = new Screen("Screen", 10000, "Screen");
+            Phone phone3 = new Phone("Iphone", 10000, "Phone");
 
             Screen screen01 = new Screen("Asus");
             Phone phone01 = new Phone("Samsung Electronics");
-            /*
-            gadgets.Add(computer);
-            gadgets.Add(computer2);
-            gadgets.Add(computer3);
-            gadgets.Add(screen);
-            gadgets.Add(screen2);
-            gadgets.Add(screen2);
-            gadgets.Add(phone);
-            gadgets.Add(phone2);
-            gadgets.Add(phone3);
-
-            int price1 = 0;
-            int price2 = 0;
-            int price3 = 0;
-            int sum=0;
-
-            foreach(Gadget gadget in gadgets)
-            {
-                sum += gadget.PriceForDevice;
-                
-            }
-            Console.WriteLine(sum);
-            
-            Console.WriteLine("Choose a kind of gadjets to sum up their costs: PC(1)   Screen(2)    Phone(3)");
-            string key = Console.ReadLine();
-            if (key == "1")
-            {
-                foreach (Computer comp in gadgets)
-                {
-                    price1 =+comp.PriceForDevice;
-                }
-                Console.WriteLine("Price for all PC = " + price1);
-            }
-            else if (key == "2")
-            {
-                foreach (Screen scr in gadgets)
-                {
-                    price2 = scr.PriceForDevice++;
-                }
-                Console.WriteLine("Price for all Screen = " + price2);
-
-            }
-            else if (key == "3")
-            {
-                foreach (Phone ph in gadgets)
-                {
-                    price3 = ph.PriceForDevice++;
-                }
-                Console.WriteLine("Price for all Screen = " + price3);
-
-            }
+            var shop = new Shop();
+            shop.AddToListShop(computer);
+            shop.AddToListShop(screen);
+            shop.AddToListShop(phone);
+            shop.AddToListShop(computer2);
+            shop.AddToListShop(screen2);
+            shop.AddToListShop(phone2);
+            shop.AddToListShop(computer3);
+            shop.AddToListShop(screen3);
+            shop.AddToListShop(phone3);
+            shop.sort();
 
 
-            */
-            shop.Shop(computer, gadgets);
-            shop.Shop(screen, gadgets);
-            shop.Shop(phone, gadgets);
-            shop.Shop(computer2, gadgets);
-            shop.Shop(screen2, gadgets);
-            shop.Shop(phone2, gadgets);
-            shop.Shop(computer3, gadgets);
-            shop.Shop(screen3, gadgets);
-            shop.Shop(phone3, gadgets);
-            shop.Sort(gadgets);
-            
             computer.GetInfo();computer.GetPrice();computer.Restart();
             screen.GetInfo(); screen.GetPrice(); screen01.GetMArka(); screen.Connection(); screen.Restart();
             phone.GetInfo(); phone.GetPrice(); phone01.GetMArka(); phone.Connection(); phone.Restart();
